@@ -1,8 +1,11 @@
 import 'dart:async';
+import 'dart:math';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 List abc=['A','B','C','D'];
+List text=['Abc','Bsc','Cdf','Dfg'];
+
 void main() {
   runApp(MyApp());
 }
@@ -120,7 +123,7 @@ class _MyHomePageState extends State<MyHomePage> {
             ()=>Navigator.pushReplacement(context,
             MaterialPageRoute(builder:
                 (context) =>
-                    Class()
+                Class()
             )
         )
     );
@@ -160,6 +163,11 @@ class _ClassState extends State<Class> {
   int colC = 2;
   int col_charval=2;
   int row_charval=2;
+  String generateRandomString(int len) {
+    var r = Random();
+    const _chars = 'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz1234567890';
+    return List.generate(len, (index) => _chars[r.nextInt(_chars.length)]).join();
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -220,10 +228,10 @@ class _ClassState extends State<Class> {
                           child: TextField(
                             controller: column,
                             decoration: const InputDecoration(
-                                focusedBorder: InputBorder.none,
-                                enabledBorder: InputBorder.none,
-                                errorBorder: InputBorder.none,
-                                disabledBorder: InputBorder.none,
+                              focusedBorder: InputBorder.none,
+                              enabledBorder: InputBorder.none,
+                              errorBorder: InputBorder.none,
+                              disabledBorder: InputBorder.none,
                               contentPadding:
                               EdgeInsets.only(left: 15, bottom: 11, top: 11, right: 15),
                               labelText: 'Enter your col',
@@ -245,58 +253,64 @@ class _ClassState extends State<Class> {
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Container(
-                    decoration: BoxDecoration(
-                      color:Colors.white,
-                      border: Border.all(
-                        color: Colors.black,
-                        width: 1,
-                      ),
-                      borderRadius: BorderRadius.circular(2),
-                    ),
-                      width: 240,
-                    child: Center(
-                      child: new TextField(
-
-                        decoration: InputDecoration(
-                          focusedBorder: InputBorder.none,
-                          enabledBorder: InputBorder.none,
-                          errorBorder: InputBorder.none,
-                          disabledBorder: InputBorder.none,
-                          labelText: 'Enter your alphabets',
-                          contentPadding:
-                          EdgeInsets.only(left: 15, bottom:1, top: 10, right: 15),
+                      decoration: BoxDecoration(
+                        color:Colors.white,
+                        border: Border.all(
+                          color: Colors.black,
+                          width: 1,
                         ),
-                        controller: _controller,
-                        onTap: (){
-                          setState(() {
-                           row_charval = int.parse(row.text);
-                             col_charval = int.parse(column.text);
-
-                          });
-
-                        },
-                        maxLengthEnforced: true,
-                        keyboardType: TextInputType.number,
-                        maxLength:row_charval*col_charval, //9999 upper limit
+                        borderRadius: BorderRadius.circular(2),
                       ),
-                    ), //Tex
+                      width: 240,
+                      child: Center(
+                        child: new TextField(
 
-                ),
+                          decoration: InputDecoration(
+                            focusedBorder: InputBorder.none,
+                            enabledBorder: InputBorder.none,
+                            errorBorder: InputBorder.none,
+                            disabledBorder: InputBorder.none,
+                            labelText: 'Enter your alphabets',
+                            contentPadding:
+                            EdgeInsets.only(left: 15, bottom:1, top: 10, right: 15),
+                          ),
+                          controller: _controller,
+                          onTap: (){
+                            setState(() {
+                              row_charval = int.parse(row.text);
+                              col_charval = int.parse(column.text);
+
+                            });
+
+                          },
+                          maxLengthEnforced: true,
+                          keyboardType: TextInputType.number,
+                          maxLength:row_charval*col_charval, //9999 upper limit
+                        ),
+                      ), //Tex
+
+                    ),
                   ), FlatButton(onPressed: (){
-                rowC = int.parse(row.text);
-                colC = int.parse(column.text);
-                setState(() {
-                  print(_controller.text.split(''));
-                  abc=  _controller.text.split('');
-                  print(abc);
-                });
-              }, child: Container(
-                  height: 60,
-                  width: 60,
-                  color: Colors.purple,
-                  // padding: EdgeInsets.only(),
-                  child: Center(child: Text("add ")))),
-            ]),
+                    rowC = int.parse(row.text);
+                    colC = int.parse(column.text);
+                    setState(() {
+                      print(_controller.text.split(''));
+                      abc=  _controller.text.split('');
+                      print(abc);
+                      text.clear();
+                      for(int i=0;i<rowC*colC;i++){
+
+                        text.add(generateRandomString(4));
+                      }
+
+                    });
+                  }, child: Container(
+                      height: 60,
+                      width: 60,
+                      color: Colors.purple,
+                      // padding: EdgeInsets.only(),
+                      child: Center(child: Text("add ")))),
+                ]),
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Row(
@@ -332,7 +346,7 @@ class _ClassState extends State<Class> {
 
                           },
                           maxLengthEnforced: true,
-                           //9999 upper limit
+                          //9999 upper limit
                         ),
                       ), //Tex
 
@@ -361,8 +375,12 @@ class _ClassState extends State<Class> {
                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: rowC,childAspectRatio: colC*rowC/2 ,crossAxisSpacing: 10,mainAxisSpacing: 10),
                   shrinkWrap: false,
                   itemBuilder: (context, index) => Container(
-                    color:_controller1.text==abc[index]?Colors.red:Colors.greenAccent,
-                    child: Center(child: Text(abc[index])),
+                    color:_controller1.text==text[index]?Colors.red:Colors.greenAccent,
+                    child: Center(child: Column(children:[ Text(abc[index]),
+                      Text(text[index])
+
+
+                    ])),
                   ),
                 ),
               ),
